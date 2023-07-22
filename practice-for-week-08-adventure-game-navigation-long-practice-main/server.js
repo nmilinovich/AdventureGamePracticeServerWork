@@ -34,8 +34,26 @@ const server = http.createServer((req, res) => {
 
     /* ======================== ROUTE HANDLERS ========================== */
     // Phase 1: GET /
+    // const server = http.createServer((req, res) => {
+      // console.log(`${req.method} ${req.url}`);
+    if (req.method === 'GET' && req.url === '/'){
+      const htmlPage = fs.readFileSync('./views/new-player.html', 'utf-8');
+      const modHtml = htmlPage.replace(/#{availableRooms}/g, world.availableRoomsToString());
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      // res.write(modHtml);
+      return res.end(modHtml);
+    }
+    // });
 
     // Phase 2: POST /player
+    if (req.method === 'POST' && req.url === '/player') {
+      console.log(req.body);
+      const { name, roomId } = req.body;
+      player = new Player;
+      res.statusCode = 302;
+      res.setHeader('Location', `/rooms/${player.currentRoom.id}`);
+    }
 
     // Phase 3: GET /rooms/:roomId
 
